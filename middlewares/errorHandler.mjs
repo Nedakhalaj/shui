@@ -1,6 +1,5 @@
 import { sendError } from "../services/responses.mjs";
 
-
 export const errorHandler = () => ({
   onError: async (request) => {
     const error = request.error;
