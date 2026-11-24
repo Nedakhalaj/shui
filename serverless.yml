@@ -9,6 +9,14 @@ provider:
   iam:
     role: ${file(./config.yml):role}
 
+functions:
+  register:
+    handler: functions/register/index.handler
+    events:
+      - httpApi:
+          path: /auth/register
+          method: POST
+
 resources:
   Resources:
     UsersTable:
