@@ -25,7 +25,13 @@ functions:
       - httpApi:
           path: /auth/login
           method: POST
-
+  createPost:
+    handler: functions/createPost/index.handler
+    events:
+      - httpApi:
+          path: /posts
+          method: POST
+          
 resources:
   Resources:
     UsersTable:
