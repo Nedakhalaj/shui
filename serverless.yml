@@ -31,7 +31,13 @@ functions:
       - httpApi:
           path: /posts
           method: POST
-          
+  getPosts:
+    handler: functions/get-posts/index.handler
+    events:
+      - httpApi:
+          path: /posts
+          method: GET
+
 resources:
   Resources:
     UsersTable:
