@@ -28,3 +28,12 @@ export const getPostById = async (id) => {
     );
     return Item;
 }
+
+export const updatePost = async (post) => {
+   await db.send(
+    new PutCommand({
+      TableName: TABLES.posts,
+      Item: post,
+    }),
+  );
+}

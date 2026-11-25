@@ -43,6 +43,12 @@ functions:
       - httpApi:
           path: /posts/{postId}
           method: GET
+  updatePost:
+    handler: functions/updatePost/index.handler
+    events:
+      - httpApi:
+          path: /posts/{postId}
+          method: PUT
 
 resources:
   Resources:
