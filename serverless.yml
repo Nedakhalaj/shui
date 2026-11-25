@@ -9,6 +9,9 @@ provider:
   iam:
     role: ${file(./config.yml):role}
 
+  environment:
+    JWT_SECRET: ${file(./config.yml):jwtSecret}
+
 functions:
   register:
     handler: functions/register/index.handler
