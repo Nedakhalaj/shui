@@ -37,6 +37,12 @@ functions:
       - httpApi:
           path: /posts
           method: GET
+  getPostById:
+    handler: functions/getPostById/index.handler
+    events:
+      - httpApi:
+          path: /posts/{postId}
+          method: GET
 
 resources:
   Resources:
