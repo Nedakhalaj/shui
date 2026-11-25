@@ -1,4 +1,4 @@
-import { PutCommand } from "@aws-sdk/lib-dynamodb";
+import { PutCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { db, TABLES } from "./db.mjs";
 
 export const createPost = async (post) => {
@@ -8,4 +8,13 @@ export const createPost = async (post) => {
       Item: post,
     }),
   );
+};
+
+export const getAllPosts = async () => {
+  const { Items } = await db.send(
+    new ScanCommand({
+      TableName: TABLES.posts,
+    }),
+  );
+  return Items;
 };
