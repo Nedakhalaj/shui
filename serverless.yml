@@ -49,6 +49,12 @@ functions:
       - httpApi:
           path: /posts/{postId}
           method: PUT
+  deletePost:        
+    handler: functions/deletePost/index.handler
+    events:
+      - httpApi:
+          path: /posts/{postId}
+          method: DELETE
 
 resources:
   Resources:
