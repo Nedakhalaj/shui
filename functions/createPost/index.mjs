@@ -1,17 +1,16 @@
 import middy from "@middy/core";
 import httpJsonBodyParser from "@middy/http-json-body-parser";
-import { createError } from "@middy/util";
 import { sendResponse } from "../../services/responses.mjs";
 import { errorHandler } from "../../middlewares/errorHandler.mjs";
 import { randomUUID } from "node:crypto";
 import { createPost } from "../../services/posts.mjs";
 import { authenticate } from "../../middlewares/authenticate.mjs";
+import { validate } from "../../middlewares/validate.mjs";
+import { postSchema } from "../../models/postSchemas.mjs";
 
 const createPostHandler = async (event) => {
   const { title, content } = event.body;
-  if (!title || !content) {
-    throw createError(400, "title and content are required");
-  }
+
   const now = new Date().toISOString();
   const post = {
     id: randomUUID(),
@@ -29,4 +28,5 @@ const createPostHandler = async (event) => {
 export const handler = middy(createPostHandler)
   .use(httpJsonBodyParser())
   .use(authenticate())
+  .use(validate(postSchema))
   .use(errorHandler());

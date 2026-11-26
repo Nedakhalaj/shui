@@ -5,16 +5,12 @@ import { sendResponse } from "../../services/responses.mjs";
 import { errorHandler } from "../../middlewares/errorHandler.mjs";
 import { createUser, getUserByUsername } from "../../services/users.mjs";
 import { hashPassword } from "../../utils/bcrypt.mjs";
+import { validate } from "../../middlewares/validate.mjs";
+import { registerSchema } from "../../models/authSchemas.mjs";
 
 const registerHandler = async (event) => {
   const { username, password } = event.body;
 
-  if (!username || !password) {
-    throw createError(400, "username and password are required");
-  }
-  if (password.length < 10) {
-    throw createError(400, `password has to be at least 10 characters`);
-  }
   if (await getUserByUsername(username)) {
     throw createError(409, "Username already exists");
   }
@@ -30,4 +26,5 @@ const registerHandler = async (event) => {
 
 export const handler = middy(registerHandler)
   .use(httpJsonBodyParser())
+  .use(validate(registerSchema))
   .use(errorHandler());

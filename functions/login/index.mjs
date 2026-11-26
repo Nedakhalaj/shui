@@ -6,27 +6,25 @@ import { errorHandler } from "../../middlewares/errorHandler.mjs";
 import { getUserByUsername } from "../../services/users.mjs";
 import { signToken } from "../../utils/jwt.mjs";
 import { comparePassword } from "../../utils/bcrypt.mjs";
-
+import { validate } from "../../middlewares/validate.mjs";
+import { loginSchema } from "../../models/authSchemas.mjs";
 
 const loginHandler = async (event) => {
   const { username, password } = event.body;
-
-  if (!username || !password) {
-    throw createError(400, "username and password are required");
-  }
   const user = await getUserByUsername(username);
 
   if (!user) {
     throw createError(401, "Wrong username or password");
   }
 
-  if (await comparePassword(password, user.password) === false){
-     throw createError(401, "Wrong username or password");
-}
+  if ((await comparePassword(password, user.password)) === false) {
+    throw createError(401, "Wrong username or password");
+  }
   const token = signToken(username);
-  return sendResponse(200, {message: "Login successful", token, username });
-}
+  return sendResponse(200, { message: "Login successful", token, username });
+};
 
 export const handler = middy(loginHandler)
-.use(httpJsonBodyParser())
-.use(errorHandler())
+  .use(httpJsonBodyParser())
+  .use(validate(loginSchema))
+  .use(errorHandler());
