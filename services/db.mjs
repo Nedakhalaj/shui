@@ -14,5 +14,6 @@ export const db = DynamoDBDocumentClient.from(client);
  */
 export const TABLES = {
  users: "shui-users",
- posts: "shui-posts"
+ posts: "shui-posts",
+ comments: "shui-comments"
 };
