@@ -2,9 +2,9 @@ import middy from "@middy/core";
 import httpJsonBodyParser from "@middy/http-json-body-parser";
 import { sendResponse } from "../../services/responses.mjs";
 import { errorHandler } from "../../middlewares/errorHandler.mjs";
-import { randomUUID } from "node:crypto";
+import { randomUUID, randomInt } from "node:crypto";
+import { optionalAuthenticate } from "../../middlewares/optionalAuthenticate.mjs";
 import { createPost } from "../../services/posts.mjs";
-import { authenticate } from "../../middlewares/authenticate.mjs";
 import { validate } from "../../middlewares/validate.mjs";
 import { postSchema } from "../../models/postSchemas.mjs";
 
@@ -12,10 +12,11 @@ const createPostHandler = async (event) => {
   const { title, content } = event.body;
 
   const now = new Date().toISOString();
+  const isGuest = !event.user;
   const post = {
     id: randomUUID(),
-    username: event.user.username,
-    isGuest: false,
+    username: isGuest ? `guest${randomInt(1000, 10000)}` : event.user.username,
+    isGuest,
     title,
     content,
     createdAt: now,
@@ -27,6 +28,6 @@ const createPostHandler = async (event) => {
 
 export const handler = middy(createPostHandler)
   .use(httpJsonBodyParser())
-  .use(authenticate())
+  .use(optionalAuthenticate())
   .use(validate(postSchema))
   .use(errorHandler());
