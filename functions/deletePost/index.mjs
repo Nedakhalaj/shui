@@ -11,7 +11,7 @@ const deletePostHandler = async (event) => {
   if (!post) {
     throw createError(404, "Post not found");
   }
-  if (post.username !== event.user.username) {
+  if (post.isGuest || post.username !== event.user.username) {
     throw createError(403, "You can only delete your own posts");
   }
 
