@@ -1,4 +1,4 @@
-import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { PutCommand, QueryCommand , DeleteCommand} from "@aws-sdk/lib-dynamodb";
 import { db, TABLES } from "./db.mjs";
 
 export const createComment = async (comment) => {
@@ -21,3 +21,11 @@ export const getCommentsByPostId = async (postId) => {
 return result.Items;
 };
 
+export const deleteComment = async (postId, id) => {
+  await db.send(
+    new DeleteCommand({
+      TableName: TABLES.comments,
+      Key: { postId, id },
+    }),
+  );
+};
