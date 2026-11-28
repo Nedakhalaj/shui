@@ -55,7 +55,13 @@ functions:
       - httpApi:
           path: /posts/{postId}
           method: DELETE
-
+  createComment:
+    handler: functions/createComment/index.handler
+    events:
+      - httpApi:
+          path: /posts/{postId}/comments
+          method: POST
+          
 resources:
   Resources:
     UsersTable:
