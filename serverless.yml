@@ -61,7 +61,13 @@ functions:
       - httpApi:
           path: /posts/{postId}/comments
           method: POST
-          
+  getComments:
+    handler: functions/getComments/index.handler
+    events:
+      - httpApi:
+          path: /posts/{postId}/comments
+          method: GET
+                
 resources:
   Resources:
     UsersTable:
